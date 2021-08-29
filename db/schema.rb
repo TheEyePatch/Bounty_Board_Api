@@ -42,6 +42,13 @@ ActiveRecord::Schema.define(version: 2021_08_29_114026) do
     t.index ["bounty_id"], name: "index_comments_on_bounty_id"
   end
 
+  create_table "projects", force: :cascade do |t|
+    t.string "title"
+    t.text "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "username"

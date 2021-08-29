@@ -1,4 +1,6 @@
 class V1::BountiesController < ApplicationController
+  before_action :authenticate_user, only: [:show, :index, :create, :update, :destroy]
+
   def index
     @bounties = Bounty.all
     render json: @bounties
