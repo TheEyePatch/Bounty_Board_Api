@@ -1,4 +1,6 @@
 class V1::CommentsController < ApplicationController
+  before_action :authenticate_user, only: [:show, :index, :create, :update, :destroy]
+
   before_action :get_bounty
 
   def index
