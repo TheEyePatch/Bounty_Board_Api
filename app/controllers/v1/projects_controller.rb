@@ -1,6 +1,6 @@
 class V1::ProjectsController < ApplicationController
-    # before_action :authenticate_user, only: [:show, :index, :create, :update]
-    # before_action :authenticate_admin, only: [:create, :update]
+    before_action :authenticate_user, only: [:show, :index]
+    before_action :authenticate_admin, only: [:create, :update]
     
     def index
         @projects = Project.all

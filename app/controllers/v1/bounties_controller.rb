@@ -1,5 +1,5 @@
 class V1::BountiesController < ApplicationController
-  before_action :authenticate_user, only: [:show, :index,:create, :update]
+  before_action :authenticate_user, only: [:show, :index, :update]
   before_action :authenticate_admin, only: [:create, :delete]
   before_action :get_project, only: :create
 
