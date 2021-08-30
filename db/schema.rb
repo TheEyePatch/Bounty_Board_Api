@@ -27,6 +27,7 @@ ActiveRecord::Schema.define(version: 2021_08_30_155202) do
     t.string "description"
     t.string "link"
     t.bigint "bounty_hunter_id"
+    t.bigint "project_id"
     t.integer "reward_points"
     t.string "urgency"
     t.string "status", default: "available"
@@ -37,6 +38,7 @@ ActiveRecord::Schema.define(version: 2021_08_30_155202) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["bounty_hunter_id"], name: "index_bounties_on_bounty_hunter_id"
+    t.index ["project_id"], name: "index_bounties_on_project_id"
   end
 
   create_table "comments", force: :cascade do |t|

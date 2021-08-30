@@ -1,4 +1,7 @@
-# frozen_string_literal: true
+class V1::BountiesController < ApplicationController
+  before_action :authenticate_user, only: [:show, :index, :update]
+  before_action :authenticate_admin, only: [:create, :delete]
+  before_action :get_project, only: :create
 
 module V1
   class BountiesController < ApplicationController
@@ -9,10 +12,8 @@ module V1
       render json: @bounties
     end
 
-    def show
-      @bounty = Bounty.find(params[:id])
-      render json: @bounty
-    end
+  def create
+    @bounty = @project.bounties.build(bounty_params)
 
     def create
       @bounty = Bounty.new(bounty_params)
@@ -56,8 +57,12 @@ module V1
     private
 
     def bounty_params
-      params.require(:bounty).permit(:title, :description, :link, :reward_points, :urgency, :status, :deadline,
-                                     :date_finished)
+      params.require(:bounty).permit(:title, :description, :link, :reward_points, :urgency, :status, :deadline, :date_finished, :project_id)
+    end
+
+    def get_project
+      @project = Project.find(bounty_params[:project_id])
+      return @project if @project
     end
   end
 end

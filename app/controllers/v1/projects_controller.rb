@@ -1,9 +1,7 @@
-# frozen_string_literal: true
-
-module V1
-  class ProjectsController < ApplicationController
-    before_action :authenticate_user, only: %i[show index create update destroy]
-
+class V1::ProjectsController < ApplicationController
+    before_action :authenticate_user, only: [:show, :index]
+    before_action :authenticate_admin, only: [:create, :update]
+    
     def index
       @projects = Project.all
       render json: @projects
