@@ -1,3 +1,4 @@
 class Bounty < ApplicationRecord
-  belongs_to :bounty_hunter
+  has_many :appointments
+  has_many :bounties, through: :appointments
 end
