@@ -5,6 +5,7 @@ class CreateBounties < ActiveRecord::Migration[6.1]
       t.string :description
       t.string :link
       t.belongs_to :bounty_hunter
+      t.belongs_to :project
       t.integer :reward_points
       t.string :urgency
       t.string :status
