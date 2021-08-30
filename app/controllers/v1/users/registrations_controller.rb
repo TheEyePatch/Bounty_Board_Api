@@ -1,7 +1,7 @@
 class V1::Users::RegistrationsController <  DeviseController
   prepend_before_action :require_no_authentication, only: [:new, :create, :cancel]
   before_action :ensure_params_exist, only: :create
-  
+  before_action :authenticate_user, only: :update
   
   def create
     user = BountyHunter.new(user_params)
@@ -19,6 +19,21 @@ class V1::Users::RegistrationsController <  DeviseController
         is_success: false,
         data: {},
       }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    @current_user.update(user_params)
+    if @current_user.save
+      render json: {
+        messages: 'Updated Current User Successfully',
+        data: @current_user,
+      }, status: :accepted
+    else
+      render json: {
+        messages: @current_user.errors.full_messages.first,
+        data: {}
+      }, status: :not_acceptable
     end
   end
 
