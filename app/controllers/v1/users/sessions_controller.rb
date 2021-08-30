@@ -6,7 +6,7 @@ class V1::Users::SessionsController < Devise::SessionsController
 
   def create
     if @user.valid_password?(user_sign_in_params[:password])
-      sign_in :bounty_hunter, @user
+      sign_in :user, @user
       render json: {
         messages: 'Signed in Successfully',
         is_success: true,
@@ -43,7 +43,7 @@ class V1::Users::SessionsController < Devise::SessionsController
   end
 
   def user_sign_in_params
-    params.require(:bounty_hunter).permit(:email, :password)
+    params.require(:user).permit(:email, :password)
   end
 
   def valid_token
