@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :bounties
     resources :comments, only: %i[index create update destroy]
     namespace :users do 
-      devise_for :bounty_hunters, controllers: { registrations: 'v1/users/registrations', sessions: 'v1/users/sessions' }
+      devise_for :users, controllers: { registrations: 'v1/users/registrations', sessions: 'v1/users/sessions' }
     end
     resources :projects
   end

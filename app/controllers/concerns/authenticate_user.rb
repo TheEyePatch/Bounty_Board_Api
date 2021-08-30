@@ -11,4 +11,14 @@ module AuthenticateUser
       }, status: :unprocessable_entity
     end
   end
+
+  def authenticate_admin
+    return if authenticate_user.type == 'Admin'
+    render json:{
+      messages: 'User is not an Admin',
+        data: {}
+      }, status: :not_acceptable
+  end
+ 
 end
+
