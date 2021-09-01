@@ -1,5 +1,5 @@
 class V1::BountiesController < ApplicationController
-  before_action :authenticate_user, only: [:show, :index, :update]
+  before_action :authenticate_user, only: [:show, :index, :update, :dibs]
   before_action :authenticate_admin, only: [:create, :delete]
   before_action :get_project, only: :create
 
@@ -43,6 +43,23 @@ class V1::BountiesController < ApplicationController
     end
   end
 
+  def dibs
+    @bounty = Bounty.find(params[:id])
+
+    if @bounty.update(status: bounty_params[:status]) && bounty_params[:status] == "in_progress"
+      Appointment.create(bounty_id: params[:id], bounty_hunter_id: @current_user.id)
+
+      render json: {
+        notice: "Successfully updated the Bounty status; Appointment created",
+        bounty: @bounty
+      }, status: :ok
+    else
+      render json: {
+        error: @bounty.errors.full_messages.first
+      }, status: :bad_request
+    end
+  end
+
   def destroy
     @bounty = Bounty.find(params[:id])
     @bounty.destroy
@@ -54,7 +71,7 @@ class V1::BountiesController < ApplicationController
 
   private
     def bounty_params
-      params.require(:bounty).permit(:title, :description, :link, :reward_points, :urgency, :status, :deadline, :date_finished, :project_id)
+      params.require(:bounty).permit(:title, :description, :link, :reward_points, :urgency, :status, :deadline, :date_finished, :project_id, :max_participants)
     end
 
     def get_project
