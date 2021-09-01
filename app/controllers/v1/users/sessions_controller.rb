@@ -6,14 +6,24 @@ class V1::Users::SessionsController < Devise::SessionsController
 
   def create
     if @user.valid_password?(user_sign_in_params[:password])
-      sign_in :user, @user
-      render json: {
-        messages: 'Signed in Successfully',
-        is_success: true,
-        data: {
-          user: @user
-        }
-      }, status: :ok
+      if @user.authentication_token
+        sign_in(:user, @user, store: false, bypass: false)
+        render json: {
+          messages: 'Signed in Successfully',
+          is_success: true,
+          data: {
+            user: @user
+          }
+        }, status: :ok
+      else
+          render json: {
+          messages: 'Account Pending for approval. wait for an admin to approve your account',
+          is_success: true,
+          data: {
+            user: @user
+          }
+        }, status: :unauthorized
+      end
     else
       render json: {
         messages: 'Invalid Email or Password',
