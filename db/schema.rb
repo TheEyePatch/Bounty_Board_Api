@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_01_111501) do
+ActiveRecord::Schema.define(version: 2021_09_01_111933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2021_09_01_111501) do
     t.boolean "approved", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "max_participants", default: 1
     t.index ["bounty_hunter_id"], name: "index_bounties_on_bounty_hunter_id"
     t.index ["project_id"], name: "index_bounties_on_project_id"
   end
