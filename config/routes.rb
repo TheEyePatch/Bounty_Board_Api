@@ -10,8 +10,9 @@ Rails.application.routes.draw do
     resources :comments, only: %i[index create update destroy]
     namespace :users do 
       devise_for :users, controllers: { registrations: 'v1/users/registrations', sessions: 'v1/users/sessions' }
+      get 'users/pending_users'
+      post 'users/:id/approve_user', to: 'users#approve_user'
     end
-    resources :projects
   end
   
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
