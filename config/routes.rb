@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
 
   namespace :v1 do
-    resources :bounties
+    resources :bounties do
+        member do
+            patch :dibs
+        end
+    end
+
     resources :comments, only: %i[index create update destroy]
     namespace :users do 
       devise_for :users, controllers: { registrations: 'v1/users/registrations', sessions: 'v1/users/sessions' }
