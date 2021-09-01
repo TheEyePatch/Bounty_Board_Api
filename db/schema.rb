@@ -72,6 +72,8 @@ ActiveRecord::Schema.define(version: 2021_09_01_111933) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "authentication_token", limit: 30
+    t.boolean "approved", default: false, null: false
+    t.bigint "verified_by"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
