@@ -1,6 +1,6 @@
 class V1::BountiesController < ApplicationController
-  before_action :authenticate_user, only: [:show, :index, :update, :dibs]
-  before_action :authenticate_admin, only: [:create, :delete]
+  before_action :authenticate_user, only: [:show, :index, :update, :dibs, :create]
+  before_action :authenticate_admin, only: :delete
   before_action :get_project, only: :create
 
   def index
@@ -16,7 +16,13 @@ class V1::BountiesController < ApplicationController
   def create
     @bounty = @project.bounties.build(bounty_params)
 
-    if @bounty.save
+    if @bounty.save  && @current_user.type == "Admin"
+      @bounty.update(approved: true)
+      render json: {
+        notice: "Successfully posted the Bounty",
+        bounty: @bounty
+      }, status: :created
+    elsif @bounty.save
       render json: {
         notice: "Successfully posted the Bounty",
         bounty: @bounty
@@ -28,12 +34,26 @@ class V1::BountiesController < ApplicationController
     end
   end
 
+  def approve
+    @bounty = Bounty.find(params[:id])
+    if @bounty.update(approved: bounty_params[:approved]) && @bounty.save
+      render json: {
+        notice: "Successfully posted the Bounty",
+        bounty: @bounty
+      }, status: :created
+    else
+      render json: {
+        error: @bounty.errors.full_messages.first
+      }, status: :bad_request
+    end
+  end
+  
   def update
     @bounty = Bounty.find(params[:id])
 
     if @bounty.update(bounty_params)
       render json: {
-        notice: "Successfully updated the Bounty",
+        notice: "Successfully Approved Bounty",
         bounty: @bounty
       }, status: :ok
     else
@@ -71,7 +91,7 @@ class V1::BountiesController < ApplicationController
 
   private
     def bounty_params
-      params.require(:bounty).permit(:title, :description, :link, :reward_points, :urgency, :status, :deadline, :date_finished, :project_id, :max_participants)
+      params.require(:bounty).permit(:title, :description, :link, :reward_points, :urgency, :status, :deadline, :date_finished, :project_id, :max_participants,  :approved)
     end
 
     def get_project
