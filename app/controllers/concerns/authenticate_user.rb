@@ -10,9 +10,11 @@ module AuthenticateUser
         data: {}
       }, status: :unprocessable_entity
     end
+    return
   end
 
   def authenticate_admin
+    return if authenticate_user.nil?
     return if authenticate_user.type == 'Admin'
     render json:{
       messages: 'User is not an Admin',
