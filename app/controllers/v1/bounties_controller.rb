@@ -1,6 +1,6 @@
 class V1::BountiesController < ApplicationController
   before_action :authenticate_user, only: [:show, :index, :update, :dibs, :create]
-  before_action :authenticate_admin, only: :delete
+  before_action :authenticate_admin, only: [:delete, :approve, :approve_finished_bounty]
   before_action :get_project, only: :create
 
   def index
@@ -34,6 +34,8 @@ class V1::BountiesController < ApplicationController
     end
   end
 
+
+  # Both the approve and approve_finished_bounty are for Admin only.
   def approve
     @bounty = Bounty.find(params[:id])
     if @bounty.update(approved: bounty_params[:approved]) && @bounty.save
@@ -46,6 +48,21 @@ class V1::BountiesController < ApplicationController
         error: @bounty.errors.full_messages.first
       }, status: :bad_request
     end
+  end
+
+  def approve_finished_bounty
+    bounty = Bounty.find(params[:id])
+    if bounty.update(status: bounty_params[:status]) && bounty.save
+      render json: {
+        notice: 'Bounty is finished',
+        bounty: bounty,
+      }, status: :ok
+    else
+      render json: {
+        error: bounty.errors.full_messages.first
+      },status: :bad_request
+    end
+
   end
   
   def update
