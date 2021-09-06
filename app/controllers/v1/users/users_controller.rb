@@ -18,6 +18,7 @@ class V1::Users::UsersController < ApplicationController
     @user.verified_by = @current_user.id
     @user.generate_token
     if @user.save(:validate => false)
+      UserMailer.approve_account(@user).deliver
         render json: {
                 notice: "Successfully Approve #{@user.username}",
             },status: :ok
