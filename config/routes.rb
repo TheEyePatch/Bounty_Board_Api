@@ -5,6 +5,7 @@ Rails.application.routes.draw do
         member do
             patch :dibs
             patch :approve
+            patch :approve_finished_bounty
         end
     end
     resources :comments, only: %i[index create update destroy]
