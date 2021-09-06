@@ -4,10 +4,11 @@ class V1::Users::UsersController < ApplicationController
 
   def pending_users
     @users = User.pending_users
+    user_serializer = parse_json @users
     render json: {
           is_success: true,
           data: {
-            user: @users
+            user: user_serializer
           }
         }, status: :ok
   end
